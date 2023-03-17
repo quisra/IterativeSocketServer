@@ -23,9 +23,10 @@ public class IterativeSocketServer {
             while (notDone) {
 
                 Socket socket = serverSocket.accept();// listen for connection
+                System.out.println("New client connected....");
 
                 // READ THE COMMANDS FROM CLIENT
-                System.out.println("What command do you have for the server?");
+                // System.out.println("What command do you have for the server?");
                 InputStream input = socket.getInputStream();// read command from client
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 String command = reader.readLine(); // reads a line of text
