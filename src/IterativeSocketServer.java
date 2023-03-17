@@ -21,10 +21,41 @@ public class IterativeSocketServer {
             System.out.println("Directed to port " + portNum + " .....");
             boolean notDone = true;
             while (notDone) {
+
                 Socket socket = serverSocket.accept();// listen for connection
-                InputStream input = socket.getInputStream();// read data from client
+
+                // READ THE COMMANDS FROM CLIENT
+                System.out.println("What command do you have for the server?");
+                InputStream input = socket.getInputStream();// read command from client
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                String line = reader.readLine(); // reads a line of text
+                String command = reader.readLine(); // reads a line of text
+
+                // ***WHAT WE USE THE COMMANDS FOR(PROCESSES)*/
+                String s = null;
+                Process p = Runtime.getRuntime().exec(command);
+
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));// contains the
+                                                                                                        // normal output
+                                                                                                        // after command
+
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));// contains the
+                                                                                                        // error output
+                                                                                                        // after command
+
+                // read the output from the command
+                System.out.println("Here is the standard output of the command:\n");
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+
+                // read any errors from the attempted command
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println(s);
+                }
+                // ************End of processes */
+
+                // after actions are done these lines send info back to the client
                 OutputStream output = socket.getOutputStream();// Send data to client
                 PrintWriter writer = new PrintWriter(output, true);
                 writer.println("This is a message");
